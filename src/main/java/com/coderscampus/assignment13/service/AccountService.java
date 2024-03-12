@@ -53,4 +53,8 @@ public class AccountService {
 		user.getAccounts().add(account);
 		saveAccount(account);
 	}
+
+	public Account save(Account account) {
+		return accountRepo.save(account);
+	}
 }

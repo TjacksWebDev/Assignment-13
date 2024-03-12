@@ -1,5 +1,6 @@
 package com.coderscampus.assignment13.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,7 +15,7 @@ public class Address {
 	private String addressLine1;
 	private String addressLine2;
 	private String city;
-	private String region;
+	private String state;
 	private String country;
 	private String zipCode;
 
@@ -27,7 +28,7 @@ public class Address {
 		this.userId = userId;
 	}
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.PERSIST)
 	@MapsId
 	@JoinColumn(name = "user_id")
 	public User getUser() {
@@ -66,12 +67,12 @@ public class Address {
 	}
 
 	@Column(length = 100)
-	public String getRegion() {
-		return region;
+	public String getState() {
+		return state;
 	}
 
-	public void setRegion(String region) {
-		this.region = region;
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	@Column(length = 100)
@@ -91,4 +92,31 @@ public class Address {
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		if (userId == null) {
+			if (other.userId != null)
+				return false;
+		} else if (!userId.equals(other.userId))
+			return false;
+		return true;
+	}
+
+	
 }
