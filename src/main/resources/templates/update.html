@@ -2,11 +2,11 @@
 <html xmlns:th="http://thymeleaf.org">
 
 <head>
-	<title>Register New User</title>
+	<title>User Information</title>
 </head>
 
 <body>
-	<h1>Enter User Information</h1>
+	<h1>User # [[${user.userId}]] Information</h1>
 
 	<form action="" method="post">
 		<div>
@@ -16,7 +16,7 @@
 			Username: <input type="text" th:field="${user.username}" />
 		</div>
 		<div>
-			Password: <input type="password" th:field="${user.password}" />
+			Password: <input type="password" th:field="${user.newPassword}"/>
 		</div>
 		<hr />
 		<div>
@@ -29,7 +29,7 @@
 			City: <input type="text" th:field="${address.city}" />
 		</div>
 		<div>
-			State: <input type="text" th:field="${address.region}" />
+			Region: <input type="text" th:field="${address.region}" />
 		</div>
 
 		<div>
@@ -39,15 +39,31 @@
 		<div>
 			Zipcode: <input type="text" th:field="${address.zipcode}" />
 		</div>
-		
+
 		<div>
-			<input type="submit" value="Add User" />
-		</div>
-		
-		<div>
-			<h2>To Add Bank Accounts to this user navigate from the Uuser page into that specifc user!</h2>
+			<input type="submit" value="Update User Account" />
 		</div>
 	</form>
+
+	<form th:action="@{/users/{userId}/delete(userId=${user.userId})}" method="post">
+		<input type="submit" value="Delete User Account" />
+	</form>
+
+	<hr />
+
+	<h1>Accounts</h1>
+	<div th:if="${#lists.size(accounts) > 0}" th:each="account : ${accounts}">
+		<a th:text="${account.accountName}" 
+		th:href="@{/users/{userId}/accounts/{accountId}(userId=${user.userId}, accountId=${account.accountId})}"></a> <br />
+	</div>
+	<div>
+		<form th:action="@{/users/{userId}/accounts(userId=${user.userId})}" method="post">
+			<input type="submit" value="Create New Bank Account"></input>
+		</form>
+	</div>
+
+
+	<div><a th:href="@{/users}">Back</a></div>
 </body>
 
 </html>
