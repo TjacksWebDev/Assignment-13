@@ -32,16 +32,16 @@ public class AccountService {
 	public void delete(Long accountId) {
 		accountRepo.deleteById(accountId);
 	}
-
+	
 	public Integer findAccountIndex(List<Account> accounts, Long accountId) {
-		for (int i = 0; i < accounts.size(); i++) {
-			if (accounts.get(i).getAccountId().equals(accountId)) {
+		for(int i = 0; i < accounts.size(); i++) {
+			if(accounts.get(i).getAccountId().equals(accountId)){
 				return i + 1;
 			}
 		}
 		return 0;
 	}
-
+	
 	public void nameNewBankAccount(Account account, User user) {
 		Integer accountIndex = findAccountIndex(user.getAccounts(), account.getAccountId());
 		account.setAccountName("Account # " + accountIndex);
@@ -52,9 +52,5 @@ public class AccountService {
 		account.getUsers().add(user);
 		user.getAccounts().add(account);
 		saveAccount(account);
-	}
-
-	public Account save(Account account) {
-		return accountRepo.save(account);
 	}
 }

@@ -21,66 +21,53 @@ import com.coderscampus.assignment13.service.UserService;
 
 @Controller
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private AddressService addressService;
-	
+
+	@GetMapping("/users")
+	public String getAllUsers(ModelMap model) {
+		List<User> users = userService.findAll();
+		model.put("users", users);
+		return "users";
+	}
+
 	@GetMapping("/register")
-	public String getCreateUser (ModelMap model) {
-		
+	public String registerNewUser(ModelMap model) {
 		model.put("user", new User());
-		
+		model.put("address", new Address());
 		return "register";
 	}
-	
+
 	@PostMapping("/register")
-	public String postCreateUser (User user) {
-		System.out.println(user);
-		userService.saveUser(user);
-		return "redirect:/register";
+	public String createNewUser(User user, Address address) {
+		userService.createUser(user, address);
+		return "redirect:/users";
 	}
-	
-	@GetMapping("/users")
-	public String getAllUsers (ModelMap model) {
-		Set<User> users = userService.findAll();
-		
-		model.put("users", users);
-		if (users.size() == 1) {
-			model.put("user", users.iterator().next());
-		}
-		
-		return "users";
-	}
-	
+
 	@GetMapping("/users/{userId}")
-	public String getOneUser (ModelMap model, @PathVariable Long userId) {
-		User user = userService.findByIdWithAccounts(userId);
-		if (user.getAddress() == null) {
-			Address address = new Address();
-			address.setUser(user);
-			address.setUserId(userId);
-			user.setAddress(address);
-		}
-		model.put("users", Arrays.asList(user));
+	public String viewUserByUserId(ModelMap model, @PathVariable Long userId) {
+		User user = userService.findById(userId);
+		Address address = user.getAddress();
+		List<Account> accounts = user.getAccounts();
 		model.put("user", user);
-		model.put("address", user.getAddress());
-		return "users";
+		model.put("address", address);
+		model.put("accounts", accounts);
+		return "update";
 	}
-	
+
 	@PostMapping("/users/{userId}")
-	public String postOneUser (@PathVariable Long userId, User user) {
-		User existingUser = userService.findByIdWithAccounts(userId);
-		user.setAccounts(existingUser.getAccounts());
-		Address address = addressService.save(user.getAddress());
-		user.setAddress(address);
-		userService.saveUser(user);
-		return "redirect:/users/"+user.getUserId();
+	public String updateUserInfo(@ModelAttribute("user") User updatedUser, Address address, String newPassword) {
+		User existingUser = userService.findById(updatedUser.getUserId());
+		userService.updateUserInfo(updatedUser, address, existingUser);
+		userService.setNewPasswordIfExists(newPassword, existingUser);
+		userService.saveUser(existingUser);
+		return "redirect:/users/" + existingUser.getUserId();
 	}
-	
+
+
 	@PostMapping("/users/{userId}/delete")
-	public String deleteOneUser (@PathVariable Long userId) {
+	public String deleteUser(@PathVariable Long userId) {
 		userService.delete(userId);
 		return "redirect:/users";
 	}
