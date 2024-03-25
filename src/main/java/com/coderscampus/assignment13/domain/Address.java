@@ -10,14 +10,63 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Address {
+	private String addressline1;
+	private String addressline2;
+	private String city;
+	private String region;
+	private String country;
+	private String zipcode;
+
 	private Long userId;
 	private User user;
-	private String addressLine1;
-	private String addressLine2;
-	private String city;
-	private String state;
-	private String country;
-	private String zipCode;
+
+	public String getAddressline1() {
+		return addressline1;
+	}
+
+	public void setAddressline1(String addressline1) {
+		this.addressline1 = addressline1;
+	}
+
+	public String getAddressline2() {
+		return addressline2;
+	}
+
+	public void setAddressline2(String addressline2) {
+		this.addressline2 = addressline2;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
 
 	@Id
 	public Long getUserId() {
@@ -28,7 +77,7 @@ public class Address {
 		this.userId = userId;
 	}
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne
 	@MapsId
 	@JoinColumn(name = "user_id")
 	public User getUser() {
@@ -39,84 +88,4 @@ public class Address {
 		this.user = user;
 	}
 
-	@Column(length = 200)
-	public String getAddressLine1() {
-		return addressLine1;
-	}
-
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
-	}
-
-	@Column(length = 200)
-	public String getAddressLine2() {
-		return addressLine2;
-	}
-
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
-	}
-
-	@Column(length = 100)
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	@Column(length = 100)
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	@Column(length = 100)
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	@Column(length = 15)
-	public String getZipCode() {
-		return zipCode;
-	}
-
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Address other = (Address) obj;
-		if (userId == null) {
-			if (other.userId != null)
-				return false;
-		} else if (!userId.equals(other.userId))
-			return false;
-		return true;
-	}
-
-	
 }
